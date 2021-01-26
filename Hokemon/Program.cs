@@ -6,13 +6,12 @@ namespace Hokemon
     {
         static void Main(string[] args)
         {
-            Halor halHokemon1 = new Halor();
-            halHokemon1.About();
+            Hokemon hokemon1 = new Hokemon();
             Hokemon hokemon2 = new Hokemon();
             battleArena battleArena1 = new battleArena();
-            if (battleArena1.battleRequest(halHokemon1, hokemon2) == true)
+            if (battleArena1.battleRequest(hokemon1, hokemon2) == true)
             {
-                battleArena1.fight(halHokemon1, hokemon2);
+                battleArena1.battle(hokemon1, hokemon2);
             }
         }
         public class Hokemon
@@ -108,6 +107,16 @@ namespace Hokemon
                 Console.WriteLine("I am a hokemon");
                 getDetails();
             }
+            public void fight(Hokemon hokemon2)
+            {
+                int damage;
+                damage = attackValue(attack, speed);
+                hokemon2.health = Convert.ToInt32((hokemon2.apparentHealth - damage) / hokemon2.defence);
+                hokemon2.apparentHealth -= damage;
+                Console.WriteLine("{0} attacks \ndealing {1} damage to {2} \n{2} blocks some of it and is now at {3} health", name, damage, hokemon2.name, hokemon2.health);
+                Console.WriteLine("pess any key to continue");
+                Console.ReadKey();
+            }
         }
         public class battleArena
         {
@@ -115,35 +124,43 @@ namespace Hokemon
             {
 
             }
-            public void fight(Hokemon hokemon1, Hokemon hokemon2)
+            public void battle(Hokemon hokemon1, Hokemon hokemon2)
             {
-                while (Convert.ToInt32(hokemon1.Health) >0 || Convert.ToInt32(hokemon2.Health) > 0)
+                while (hokemon1.Health >= 0 && hokemon2.Health >= 0)
                 {
-                    for (int i = 0; 1 < 2; i++)
+                    
+                    
+                    if (hokemon1.Speed >= hokemon2.Speed) 
                     {
-                        int damage;
-                        if (hokemon1.Speed >= hokemon2.Speed) 
-                        {
-                            damage = hokemon1.attackValue(hokemon1.Attack, hokemon1.Speed);
-                            hokemon2.Health = Convert.ToInt32((hokemon2.ApparentHealth - damage) / hokemon2.Defence);
-                            hokemon2.ApparentHealth -= damage;
-                            Console.WriteLine("{0} attacks first \ndealing {1} damage to {2} \n{2} blocks some of it and is now at {3} health",hokemon1.Name, damage, hokemon2.Name, hokemon2.Health );
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            damage = hokemon2.attackValue(hokemon2.Attack, hokemon2.Speed);
-                            hokemon1.Health = Convert.ToInt32((hokemon1.ApparentHealth - damage) / hokemon1.Defence);
-                            hokemon1.ApparentHealth -= damage;
-                            Console.WriteLine("{0} attacks first \ndealing {1} damage to {2} \n{2} blocks some of it and is now at {3} health", hokemon2.Name, damage, hokemon1.Name, hokemon1.Health);
-                            Console.ReadKey();
-                        }
-                        Console.WriteLine("{}");
-                        Console.WriteLine("2");
+                        Console.WriteLine("{0} has a higher speed so it attacks first", hokemon1.Name);
+                        hokemon1.fight(hokemon2);
+                        Console.WriteLine("*****************");
+                        hokemon2.fight(hokemon1);
+                        Console.WriteLine("*****************");
                     }
+                    else
+                    {
+                        Console.WriteLine("{0} has a higher speed so it attacks first", hokemon2.Name);
+                        hokemon2.fight(hokemon1);
+                        Console.WriteLine("*****************");
+                        hokemon1.fight(hokemon2);
+                        Console.WriteLine("*****************");
+                    }
+                    
 
                 }
-
+                if (hokemon1.Health <= 0)
+                {
+                    Console.WriteLine("{0} won", hokemon2.Name);
+                }
+                if (hokemon2.Health <= 0)
+                {
+                    Console.WriteLine("{0} won", hokemon1.Name);
+                }
+                else
+                {
+                    Console.WriteLine("it was a draw");
+                }
             }
             public bool battleRequest(Hokemon challenger1, Hokemon challenger2)
             {
@@ -161,13 +178,31 @@ namespace Hokemon
             }
         }
 
-        class Halor : Hokemon
+        
+        class firstAttacker : Hokemon
         {
-            private string team = "Halor";
-            public void About() //polymorphism from hokemon "about" method
+            public void fight(Hokemon hokemon2) 
             {
-                Console.WriteLine("my team is Halor");
-                
+                int damage;
+                damage = attackValue(Attack, Speed);
+                hokemon2.Health = Convert.ToInt32((hokemon2.ApparentHealth - damage) / hokemon2.Defence);
+                hokemon2.ApparentHealth -= damage;
+                Console.WriteLine("{0} attacks  \ndealing {1} damage to {2} \n{2} blocks some of it and is now at {3} health", Name, damage, hokemon2.Name, hokemon2.Health);
+                Console.WriteLine("pess any key to continue");
+                Console.ReadKey();
+            }
+        }
+        class secondAttacker : Hokemon
+        {
+            public void fight(Hokemon hokemon1)
+            {
+                int damage;
+                damage = attackValue(Attack, Speed);
+                hokemon1.Health = Convert.ToInt32((hokemon1.ApparentHealth - damage) / hokemon1.Defence);
+                hokemon1.ApparentHealth -= damage;
+                Console.WriteLine("{0} attacks  \ndealing {1} damage to {2} \n{2} blocks some of it and is now at {3} health", Name, damage, hokemon1.Name, hokemon1.Health);
+                Console.WriteLine("pess any key to continue");
+                Console.ReadKey();
             }
         }
     }
