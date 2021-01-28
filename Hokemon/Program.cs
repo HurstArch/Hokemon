@@ -135,19 +135,23 @@ namespace Hokemon
                         Console.WriteLine("{0} has a higher speed so it attacks first", hokemon1.Name);
                         hokemon1.fight(hokemon2);
                         Console.WriteLine("*****************");
-                        hokemon2.fight(hokemon1);
-                        Console.WriteLine("*****************");
+                        if (hokemon2.Health > 0)
+                        {
+                            hokemon2.fight(hokemon1);
+                            Console.WriteLine("*****************");
+                        }
                     }
                     else
                     {
                         Console.WriteLine("{0} has a higher speed so it attacks first", hokemon2.Name);
                         hokemon2.fight(hokemon1);
                         Console.WriteLine("*****************");
-                        hokemon1.fight(hokemon2);
-                        Console.WriteLine("*****************");
+                        if (hokemon1.Health > 0)
+                        {
+                            hokemon1.fight(hokemon2);
+                            Console.WriteLine("*****************");
+                        }
                     }
-                    
-
                 }
                 if (hokemon1.Health <= 0)
                 {
@@ -157,10 +161,7 @@ namespace Hokemon
                 {
                     Console.WriteLine("{0} won", hokemon1.Name);
                 }
-                else
-                {
-                    Console.WriteLine("it was a draw");
-                }
+               
             }
             public bool battleRequest(Hokemon challenger1, Hokemon challenger2)
             {
